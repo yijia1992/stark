@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.github.talelin.merak.mapper.ResidentMapper">
+
+    <resultMap id="BaseResultMap" type="io.github.talelin.merak.model.ResidentDO">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="user_no" jdbcType="VARCHAR" property="userNo"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
+        <result column="avatar" jdbcType="VARCHAR" property="avatar"/>
+<!--        <result column="email" jdbcType="VARCHAR" property="email"/>-->
+        <result column="gender" jdbcType="INTEGER" property="gender"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="lover_id" jdbcType="INTEGER" property="loverId"/>
+        <result column="ins_id" jdbcType="INTEGER" property="insId"/>
+        <result column="gas_id" jdbcType="INTEGER" property="gasId"/>
+        <result column="is_poor" jdbcType="INTEGER" property="isPoor"/>
+        <result column="is_temp" jdbcType="INTEGER" property="isTemp"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="delete_time" jdbcType="TIMESTAMP" property="deleteTime"/>
+    </resultMap>
+
+    <!--CONCAT("%",#{q},"%")-->
+    <select id="selectByTitleLikeKeyword" resultMap="BaseResultMap">
+        SELECT *
+        FROM book b
+        WHERE
+        b.title LIKE #{q}
+        AND
+        b.delete_time IS NULL
+    </select>
+
+    <select id="selectByTitle" resultMap="BaseResultMap">
+        SELECT *
+        FROM book b
+        WHERE b.title=#{title}
+        AND
+        b.delete_time IS NULL
+    </select>
+
+    <select id="selectCountByUsername" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM resident as u WHERE u.username = #{username}
+    </select>
+
+    <select id="selectCountByUserNo" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM resident as u WHERE u.user_no = #{userNo} and u.id !=#{id}
+    </select>
+
+    <select id="selectByUserNo" resultMap="BaseResultMap">
+        SELECT * FROM resident as r WHERE r.user_no = #{userNo}
+    </select>
+
+    <select id="getchildren" resultMap="BaseResultMap">
+        SELECT distinct * FROM resident as r WHERE r.parent_id = #{id1} or r.parent_id = #{id2}
+    </select>
+
+    <select id="selectByUsername" resultMap="BaseResultMap">
+        SELECT * FROM resident as r WHERE r.username = #{username}
+    </select>
+</mapper>
